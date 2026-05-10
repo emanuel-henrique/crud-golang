@@ -2,6 +2,7 @@ package user
 
 import (
 	"database-api/database"
+	"database-api/utils"
 	"fmt"
 )
 
@@ -19,16 +20,21 @@ func CreateUser(name, email, password string) (createUserModel, error) {
 	}
 
 	var existId int
-	err = db.QueryRow(`SELECT id FROM "user" WHERE email=$1`, email).Scan(&existId)
+	err = db.QueryRow(`SELECT id FROM "users" WHERE email=$1`, email).Scan(&existId)
 	if err == nil {
 		return createUserModel{}, fmt.Errorf("Email já está sendo usado.")
 	}
 
 	var created_user createUserModel
 
+	hashedPassword, err := utils.HashPassword(password)
+	if err != nil {
+		return createUserModel{}, err
+	}
+
 	err = db.QueryRow(
-		`INSERT INTO "user"(name,email,password) VALUES ($1, $2, $3) RETURNING name, email, password`,
-		name, email, password,
+		`INSERT INTO "users"(name,email,password) VALUES ($1, $2, $3) RETURNING name, email, password`,
+		name, email, hashedPassword,
 	).Scan(&created_user.Name, &created_user.Email, &created_user.Password)
 
 	if err != nil {
