@@ -41,6 +41,8 @@ func main() {
 	// PUT é usado convencionalmente para ATUALIZAR um recurso existente.
 	app.PUT("/users/:id", usercontrollers.UpdateUserHandle)
 
+	app.GET("/users/:id", usercontrollers.FindUserByIdController)
+
 	// app.Run() inicia o servidor e fica ouvindo requisições.
 	// Por padrão, sobe na porta 8080 (http://localhost:8080).
 	// Ele retorna um erro se não conseguir subir (ex: porta já em uso).
