@@ -42,6 +42,7 @@ func main() {
 	app.PUT("/users/:id", usercontrollers.UpdateUserHandle)
 
 	app.GET("/users/:id", usercontrollers.FindUserByIdController)
+	app.DELETE("/users/:id", usercontrollers.DeleteUserController)
 
 	// app.Run() inicia o servidor e fica ouvindo requisições.
 	// Por padrão, sobe na porta 8080 (http://localhost:8080).
